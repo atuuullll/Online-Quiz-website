@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Online Quiz System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .admin-title {
+            font-size: 24px;
+            color: #333;
+        }
+        
+        .question-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .options-container {
+            margin-bottom: 20px;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .option-radio {
+            margin-right: 10px;
+        }
+        
+        .option-input {
+            flex: 1;
+        }
+        
+        .btn-submit {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background: #3e8e41;
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .questions-list {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+        }
+        
+        .questions-list h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        
+        .question-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .question-options {
+            margin-bottom: 8px;
+        }
+        
+        .correct-option {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .actions {
+            margin-top: 10px;
+        }
+        
+        .btn-action {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-edit {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+        
+        .home-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #2196F3;
+            text-decoration: none;
+        }
+        
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        
+        .management-options {
+            margin-bottom: 20px;
+        }
+        
+        .question-management {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .no-questions-message {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+        
+        #questionCountInfo {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Quiz Admin Panel</h1>
+            <div>
+                <a href="index.html" class="btn-secondary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <div class="question-form">
+            <h2>Add New Question</h2>
+            <form id="addQuestionForm">
+                <div class="form-group">
+                    <label for="question">Question:</label>
+                    <textarea class="form-control" id="question" name="question" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Options (select the correct answer):</label>
+                    <div class="options-container">
+                        <div class="option-group">
+                            <input type="radio" name="correctOption" value="0" class="option-radio" required>
+                            <input type="text" class="form-control option-input" name="option1" placeholder="Option 1" required>
+                        </div>
+                        <div class="option-group">
+                            <input type="radio" name="correctOption" value="1" class="option-radio">
+                            <input type="text" class="form-control option-input" name="option2" placeholder="Option 2" required>
+                        </div>
+                        <div class="option-group">
+                            <input type="radio" name="correctOption" value="2" class="option-radio">
+                            <input type="text" class="form-control option-input" name="option3" placeholder="Option 3" required>
+                        </div>
+                        <div class="option-group">
+                            <input type="radio" name="correctOption" value="3" class="option-radio">
+                            <input type="text" class="form-control option-input" name="option4" placeholder="Option 4" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="explanation">Explanation:</label>
+                    <textarea class="form-control" id="explanation" name="explanation" placeholder="Explain why the answer is correct"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">Add Question</button>
+            </form>
+            <div id="formMessage" class="message" style="display: none;"></div>
+            
+            <!-- Status section to replace questions list -->
+            <div id="statusPanel" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px; display: none;">
+                <h3 style="margin-top: 0;">Submission Status</h3>
+                <div id="submissionCount" style="font-size: 18px; margin-bottom: 15px;">
+                    <strong>Questions Submitted:</strong> <span id="questionCount">0</span>
+                </div>
+                <div id="successRate" style="font-size: 18px; margin-bottom: 15px;">
+                    <strong>Success Rate:</strong> <span id="successRateValue">0%</span>
+                </div>
+                <div id="lastSubmitted" style="margin-bottom: 15px;">
+                    <strong>Last Submitted:</strong> <span id="lastSubmittedTime">Never</span>
+                </div>
+                <button id="resetStats" class="btn-secondary" style="margin-top: 10px;">
+                    <i class="fas fa-redo"></i> Reset Stats
+                </button>
+            </div>
+        </div>
+        
+        <!-- Add Manage Questions section -->
+        <div class="question-management">
+            <h2>Manage Questions</h2>
+            <div class="management-options">
+                <button id="loadQuestionsBtn" class="btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Load All Questions
+                </button>
+                <div style="margin-top: 15px;" id="questionCountInfo">
+                    <span id="loadedQuestionCount">0</span> questions loaded
+                </div>
+            </div>
+            
+            <div id="questionsList" style="margin-top: 20px;">
+                <div class="no-questions-message">Click "Load All Questions" to view and manage questions</div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="home-link">← Back to Home Page</a>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addQuestionForm = document.getElementById('addQuestionForm');
+            const formMessage = document.getElementById('formMessage');
+            const statusPanel = document.getElementById('statusPanel');
+            const questionCountElement = document.getElementById('questionCount');
+            const successRateElement = document.getElementById('successRateValue');
+            const lastSubmittedElement = document.getElementById('lastSubmittedTime');
+            const resetStatsButton = document.getElementById('resetStats');
+            
+            // Initialize stats from localStorage or set defaults
+            let stats = JSON.parse(localStorage.getItem('adminStats') || JSON.stringify({
+                totalSubmitted: 0,
+                successfulSubmissions: 0,
+                lastSubmittedTime: null
+            }));
+            
+            // Pending questions that failed to submit
+            let pendingQuestions = JSON.parse(localStorage.getItem('localQuestions') || '[]');
+            
+            // Update stats display
+            function updateStatsDisplay() {
+                questionCountElement.textContent = stats.totalSubmitted;
+                
+                const successRate = stats.totalSubmitted > 0 
+                    ? Math.round((stats.successfulSubmissions / stats.totalSubmitted) * 100) 
+                    : 0;
+                successRateElement.textContent = `${successRate}%`;
+                
+                lastSubmittedElement.textContent = stats.lastSubmittedTime 
+                    ? new Date(stats.lastSubmittedTime).toLocaleString() 
+                    : 'Never';
+                
+                // Show status panel if we have submissions
+                statusPanel.style.display = stats.totalSubmitted > 0 ? 'block' : 'none';
+                
+                // Add pending questions indicator if any exist
+                if (pendingQuestions.length > 0) {
+                    const pendingMessage = document.getElementById('pendingMessage') || document.createElement('div');
+                    pendingMessage.id = 'pendingMessage';
+                    pendingMessage.className = 'message warning';
+                    pendingMessage.style.marginTop = '15px';
+                    pendingMessage.innerHTML = `
+                        <strong>${pendingQuestions.length} question(s) pending upload to server.</strong> 
+                        <button id="retryBtn" class="btn-secondary" style="margin-left: 10px; padding: 3px 10px; font-size: 12px;">
+                            Retry Upload
+                        </button>
+                    `;
+                    
+                    if (!document.getElementById('pendingMessage')) {
+                        statusPanel.appendChild(pendingMessage);
+                    }
+                    
+                    // Add event listener to retry button
+                    document.getElementById('retryBtn').addEventListener('click', function() {
+                        retryPendingQuestions();
+                    });
+                } else {
+                    // Remove pending message if no pending questions
+                    const pendingMessage = document.getElementById('pendingMessage');
+                    if (pendingMessage) {
+                        pendingMessage.remove();
+                    }
+                }
+                
+                // Save stats to localStorage
+                localStorage.setItem('adminStats', JSON.stringify(stats));
+            }
+            
+            // Reset stats
+            resetStatsButton.addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all submission statistics?')) {
+                    stats = {
+                        totalSubmitted: 0,
+                        successfulSubmissions: 0,
+                        lastSubmittedTime: null
+                    };
+                    updateStatsDisplay();
+                    showMessage('Statistics have been reset', 'success');
+                }
+            });
+            
+            // Initialize stats display
+            updateStatsDisplay();
+            
+            // Try to upload any pending questions on page load
+            if (pendingQuestions.length > 0) {
+                setTimeout(() => {
+                    retryPendingQuestions();
+                }, 2000); // Wait 2 seconds after page load
+            }
+            
+            // Handle form submission
+            addQuestionForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const question = document.getElementById('question').value;
+                const explanation = document.getElementById('explanation').value;
+                const options = [
+                    document.querySelector('input[name="option1"]').value,
+                    document.querySelector('input[name="option2"]').value,
+                    document.querySelector('input[name="option3"]').value,
+                    document.querySelector('input[name="option4"]').value
+                ];
+                
+                const correctOptionElement = document.querySelector('input[name="correctOption"]:checked');
+                if (!correctOptionElement) {
+                    showMessage('Please select the correct answer', 'error');
+                    return;
+                }
+                
+                const correctOption = parseInt(correctOptionElement.value);
+                
+                // Create question object
+                const newQuestion = {
+                    question: question,
+                    options: options,
+                    correctAnswer: correctOption,
+                    explanation: explanation,
+                    id: Date.now() // Add a temporary ID
+                };
+                
+                // Submit question to server
+                submitQuestion(newQuestion);
+            });
+            
+            // Function to retry pending questions
+            function retryPendingQuestions() {
+                if (pendingQuestions.length === 0) return;
+                
+                const retryBtn = document.getElementById('retryBtn');
+                if (retryBtn) {
+                    retryBtn.disabled = true;
+                    retryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Retrying...';
+                }
+                
+                showMessage(`Attempting to upload ${pendingQuestions.length} pending question(s)...`, 'info');
+                
+                // Create a copy of the array to avoid modification during iteration
+                const questionsToRetry = [...pendingQuestions];
+                
+                // Clear the pending questions array
+                pendingQuestions = [];
+                localStorage.setItem('localQuestions', JSON.stringify(pendingQuestions));
+                
+                // Try to submit each question
+                let successCount = 0;
+                let failCount = 0;
+                
+                // Make sure the URL is correct for both different environments
+                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                            ? `http://${window.location.hostname}:5000/api/add-question`
+                            : '/api/add-question';
+                            
+                console.log(`Submitting pending questions to: ${apiUrl}`);
+                
+                const submitPromises = questionsToRetry.map(question => {
+                    return new Promise(resolve => {
+                        fetch(apiUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(question),
+                            // Add a timeout so we don't wait forever
+                            signal: AbortSignal.timeout(5000) // 5 second timeout
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Server responded with status ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(() => {
+                            successCount++;
+                            resolve(true);
+                        })
+                        .catch(error => {
+                            console.error('Failed to upload pending question:', error);
+                            failCount++;
+                            // Add back to pending questions
+                            pendingQuestions.push(question);
+                            resolve(false);
+                        });
+                    });
+                });
+                
+                Promise.all(submitPromises).then(() => {
+                    // Update local storage
+                    localStorage.setItem('localQuestions', JSON.stringify(pendingQuestions));
+                    
+                    // Update UI
+                    if (successCount > 0) {
+                        stats.successfulSubmissions += successCount;
+                        showMessage(`Successfully uploaded ${successCount} question(s)${failCount > 0 ? `, ${failCount} failed` : ''}`, 
+                                    failCount > 0 ? 'warning' : 'success');
+                    } else if (failCount > 0) {
+                        showMessage(`Failed to upload ${failCount} question(s). They will be retried later.`, 'error');
+                    }
+                    
+                    updateStatsDisplay();
+                    
+                    // Reset retry button
+                    if (retryBtn) {
+                        retryBtn.disabled = false;
+                        retryBtn.innerHTML = 'Retry Upload';
+                    }
+                });
+            }
+            
+            // Function to submit question to server
+            function submitQuestion(questionData) {
+                // Show loading state
+                const submitBtn = document.querySelector('.btn-submit');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                
+                // Update submission counter
+                stats.totalSubmitted++;
+                stats.lastSubmittedTime = new Date().toISOString();
+                updateStatsDisplay();
+                
+                // Make sure the URL is correct for both different environments
+                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                            ? `http://${window.location.hostname}:5000/api/add-question`
+                            : '/api/add-question';
+                            
+                console.log(`Submitting question to: ${apiUrl}`);
+                
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(questionData),
+                    // Add a timeout so we don't wait forever
+                    signal: AbortSignal.timeout(5000) // 5 second timeout
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.error || `Server responded with status ${response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Increment successful submissions counter
+                    stats.successfulSubmissions++;
+                    updateStatsDisplay();
+                    
+                    // Show success message
+                    showMessage(data.message || 'Question added successfully!', 'success');
+                    
+                    // Reset form
+                    addQuestionForm.reset();
+                })
+                .catch(error => {
+                    console.error('Error adding question:', error);
+                    
+                    // Try to save locally if server fails
+                    try {
+                        // Add to pending questions
+                        pendingQuestions.push(questionData);
+                        
+                        // Save to localStorage
+                        localStorage.setItem('localQuestions', JSON.stringify(pendingQuestions));
+                        
+                        showMessage('Server error, but question saved locally. It will be uploaded automatically when the server is available.', 'warning');
+                        
+                        // Update status display to show pending questions
+                        updateStatsDisplay();
+                        
+                        // Reset form since we saved the question locally
+                        addQuestionForm.reset();
+                    } catch (localError) {
+                        showMessage(`Error: ${error.message}. Also failed to save locally: ${localError.message}`, 'error');
+                    }
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                });
+            }
+            
+            // Function to show message
+            function showMessage(message, type) {
+                formMessage.textContent = message;
+                formMessage.className = `message ${type}`;
+                formMessage.style.display = 'block';
+                
+                // Hide message after 5 seconds for success/info messages
+                if (type === 'success' || type === 'info') {
+                    setTimeout(() => {
+                        formMessage.style.display = 'none';
+                    }, 5000);
+                }
+            }
+            
+            // Try to auto-retry pending questions every minute
+            setInterval(() => {
+                if (pendingQuestions.length > 0) {
+                    retryPendingQuestions();
+                }
+            }, 60000); // 1 minute
+
+            // Add new functions for question management
+            
+            // Initialize the question management section
+            const loadQuestionsBtn = document.getElementById('loadQuestionsBtn');
+            const questionsList = document.getElementById('questionsList');
+            const loadedQuestionCount = document.getElementById('loadedQuestionCount');
+            
+            loadQuestionsBtn.addEventListener('click', loadAllQuestions);
+            
+            async function loadAllQuestions() {
+                // Show loading state
+                loadQuestionsBtn.disabled = true;
+                loadQuestionsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                questionsList.innerHTML = '<div class="loading">Loading questions...</div>';
+                
+                try {
+                    // Make sure the URL is correct for different environments
+                    const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                                ? `http://${window.location.hostname}:5000/api/questions`
+                                : '/api/questions';
+                                
+                    console.log(`Fetching questions from: ${apiUrl}`);
+                    
+                    const response = await fetch(apiUrl);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status ${response.status}`);
+                    }
+                    
+                    const questions = await response.json();
+                    
+                    if (!questions || !Array.isArray(questions) || questions.length === 0) {
+                        questionsList.innerHTML = '<div class="no-questions-message">No questions available</div>';
+                        loadedQuestionCount.textContent = '0';
+                        return;
+                    }
+                    
+                    // Update question count
+                    loadedQuestionCount.textContent = questions.length;
+                    
+                    // Display questions
+                    displayAllQuestions(questions);
+                } catch (error) {
+                    console.error('Error loading questions:', error);
+                    questionsList.innerHTML = `
+                        <div class="error-message">
+                            <p>Error: ${error.message}</p>
+                            <p>Unable to load questions. Please try again later.</p>
+                        </div>
+                    `;
+                } finally {
+                    // Reset button state
+                    loadQuestionsBtn.disabled = false;
+                    loadQuestionsBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Load All Questions';
+                }
+            }
+            
+            function displayAllQuestions(questions) {
+                // Create a container for the questions
+                let html = '<div class="questions-list">';
+                
+                // Add each question
+                questions.forEach((question, index) => {
+                    const options = question.options.map((option, optIndex) => {
+                        const isCorrect = optIndex === question.correctAnswer;
+                        return `<div class="${isCorrect ? 'correct-option' : ''}">
+                            ${isCorrect ? '✓ ' : ''}Option ${optIndex + 1}: ${option}
+                        </div>`;
+                    }).join('');
+                    
+                    html += `
+                        <div class="question-item">
+                            <div class="question-text">Q${index + 1}: ${question.question}</div>
+                            <div class="question-options">${options}</div>
+                            <div class="question-explanation">
+                                <strong>Explanation:</strong> ${question.explanation || 'No explanation provided'}
+                            </div>
+                            <div class="actions">
+                                <button class="btn-action btn-delete" data-id="${question.id || index}">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                
+                // Add the HTML to the page
+                questionsList.innerHTML = html;
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.btn-delete').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        deleteQuestion(id);
+                    });
+                });
+            }
+            
+            async function deleteQuestion(id) {
+                // Show confirmation dialog
+                if (!confirm('Are you sure you want to delete this question? This action cannot be undone.')) {
+                    return;
+                }
+                
+                // Find the delete button and show loading state
+                const deleteButton = document.querySelector(`.btn-delete[data-id="${id}"]`);
+                if (deleteButton) {
+                    deleteButton.disabled = true;
+                    deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                }
+                
+                try {
+                    // Make sure the URL is correct for different environments
+                    const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                                ? `http://${window.location.hostname}:5000/api/delete-question/${id}`
+                                : `/api/delete-question/${id}`;
+                                
+                    console.log(`Deleting question from: ${apiUrl}`);
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Show success message
+                    showMessage(result.message || 'Question deleted successfully!', 'success');
+                    
+                    // Reload questions to update the list
+                    loadAllQuestions();
+                } catch (error) {
+                    console.error('Error deleting question:', error);
+                    showMessage(`Error: ${error.message}. Please try again later.`, 'error');
+                    
+                    // Reset delete button
+                    if (deleteButton) {
+                        deleteButton.disabled = false;
+                        deleteButton.textContent = 'Delete';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

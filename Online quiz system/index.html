@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Quiz System - Test Your Knowledge</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Additional styles for home page */
+        .hero {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 60px 40px;
+            margin: 30px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .stats-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .features-section {
+            margin: 60px 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: #4CAF50;
+            z-index: -1;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 60px 40px;
+            margin: 60px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .cta-title {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta-description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .testimonials {
+            margin: 60px 0;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .testimonial-text::before {
+            content: '"';
+            font-size: 4rem;
+            color: rgba(76, 175, 80, 0.2);
+            position: absolute;
+            top: -20px;
+            left: -15px;
+            font-family: serif;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .author-role {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .how-it-works {
+            margin: 60px 0;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            position: relative;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #4CAF50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .step-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+            }
+            
+            .steps:before {
+                display: none;
+            }
+        }
+        
+        /* Animation styles */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        
+        header {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-section i {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+        
+        .logo-section h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #333;
+        }
+        
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+        
+        nav ul li a:hover {
+            color: #4CAF50;
+        }
+        
+        .admin-link {
+            background: #f1f9f1;
+            color: #4CAF50 !important;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .admin-link:hover {
+            background: #e0f2e0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .btn-primary, .btn-secondary {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #4CAF50;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: #f9f9f9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .footer-content > div {
+                flex: 1 1 100%;
+                margin-bottom: 20px;
+            }
+        }
+        
+        .footer-logo h2 {
+            font-size: 1.5rem;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .footer-links h3, .footer-contact h3 {
+            font-size: 1.2rem;
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links ul li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-links ul li a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links ul li a:hover {
+            color: #4CAF50;
+        }
+        
+        .footer-contact p {
+            color: #666;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        p {
+            margin-bottom: 20px;
+        }
+        
+        section {
+            margin-bottom: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="logo-section">
+                    <i class="fas fa-brain"></i>
+                    <h1>Online Quiz System</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="admin.html" class="admin-link">Admin Panel</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        
+        <section class="hero animated">
+            <h1>Test Your Knowledge and Challenge Your Mind</h1>
+            <p>Engage with our interactive quizzes, track your progress, and improve your knowledge across various subjects. Perfect for students, professionals, and anyone eager to learn.</p>
+            <div class="hero-buttons">
+                <button id="startQuiz" class="btn-primary">Start Quiz Now</button>
+                <a href="#how-it-works" class="btn-secondary">Learn How It Works</a>
+            </div>
+        </section>
+        
+        <section class="stats-section">
+            <div class="stat-card animated delay-1">
+                <div class="stat-number">5,000+</div>
+                <div class="stat-label">Questions</div>
+            </div>
+            <div class="stat-card animated delay-2">
+                <div class="stat-number">10,000+</div>
+                <div class="stat-label">Users</div>
+            </div>
+            <div class="stat-card animated delay-3">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Topics</div>
+            </div>
+            <div class="stat-card animated delay-4">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Satisfaction</div>
+            </div>
+        </section>
+        
+        <section id="features" class="features-section">
+            <h2>Why Choose Our Quiz System?</h2>
+            <div class="features-grid">
+                <div class="feature-card animated delay-1">
+                    <div class="feature-icon"><i class="fas fa-stopwatch"></i></div>
+                    <h3 class="feature-title">Timed Quizzes</h3>
+                    <p class="feature-description">Challenge yourself with timed quizzes to improve your speed and accuracy under pressure, simulating real exam environments.</p>
+                </div>
+                <div class="feature-card animated delay-2">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="feature-title">Progress Tracking</h3>
+                    <p class="feature-description">Monitor your performance over time with detailed analytics, identify areas for improvement, and track your growth.</p>
+                </div>
+                <div class="feature-card animated delay-3">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="feature-title">Community Leaderboards</h3>
+                    <p class="feature-description">Compete with friends and other users on global leaderboards to showcase your knowledge and abilities.</p>
+                </div>
+                <div class="feature-card animated delay-4">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="feature-title">Responsive Design</h3>
+                    <p class="feature-description">Access quizzes on any device - desktop, tablet, or mobile. Learn anytime, anywhere at your convenience.</p>
+                </div>
+                <div class="feature-card animated delay-1">
+                    <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 class="feature-title">Detailed Explanations</h3>
+                    <p class="feature-description">Learn from your mistakes with comprehensive explanations for every question, improving retention and understanding.</p>
+                </div>
+                <div class="feature-card animated delay-2">
+                    <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+                    <h3 class="feature-title">Customizable Experience</h3>
+                    <p class="feature-description">Create and contribute your own questions or select from existing categories to tailor the quiz to your needs.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta-section animated">
+            <h2 class="cta-title">Ready to Challenge Yourself?</h2>
+            <p class="cta-description">Start testing your knowledge now with our diverse collection of quizzes spanning multiple subjects and difficulty levels.</p>
+            <button id="startQuizCta" class="btn-primary">Take a Quiz Now</button>
+        </section>
+        
+        <section id="how-it-works" class="how-it-works">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step animated delay-1">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Choose a Topic</h3>
+                    <p class="step-description">Select from our wide range of subjects and categories that interest you or align with your learning goals.</p>
+                </div>
+                <div class="step animated delay-2">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Take the Quiz</h3>
+                    <p class="step-description">Answer multiple-choice questions within the time limit, navigating through questions at your own pace.</p>
+                </div>
+                <div class="step animated delay-3">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Review Results</h3>
+                    <p class="step-description">Get immediate feedback with detailed explanations for each question and an overall score.</p>
+                </div>
+                <div class="step animated delay-4">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Track Progress</h3>
+                    <p class="step-description">Monitor your improvement over time, identify strengths and weaknesses, and focus your learning accordingly.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="testimonials" class="testimonials">
+            <h2>What Our Users Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animated delay-1">
+                    <p class="testimonial-text">This quiz system has transformed how I study for my exams. The variety of questions and detailed explanations have helped me improve my grades significantly.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JS</div>
+                        <div class="author-info">
+                            <div class="author-name">Jennifer Smith</div>
+                            <div class="author-role">University Student</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animated delay-2">
+                    <p class="testimonial-text">As a teacher, I use this platform to create engaging quizzes for my students. It's user-friendly and the analytics help me understand where my students need more support.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MT</div>
+                        <div class="author-info">
+                            <div class="author-name">Mark Thompson</div>
+                            <div class="author-role">High School Teacher</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animated delay-3">
+                    <p class="testimonial-text">I was preparing for my professional certification, and the timed quizzes here helped me get comfortable with the pressure of real exams. I passed on my first attempt!</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">LC</div>
+                        <div class="author-info">
+                            <div class="author-name">Lisa Chen</div>
+                            <div class="author-role">IT Professional</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-brain"></i>
+                    <h2>Online Quiz System</h2>
+                    <p>Challenging minds, expanding knowledge.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="admin.html">Admin Panel</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> contact@quizsystem.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Learning Street, Knowledge City</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Online Quiz System. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle Start Quiz button clicks
+            const startQuizButtons = document.querySelectorAll('#startQuiz, #startQuizCta');
+            startQuizButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get player name
+                    const playerName = prompt('Please enter your name:', 'Anonymous');
+                    if (!playerName) return;
+                    
+                    // Store player name in localStorage
+                    localStorage.setItem('playerName', playerName || 'Anonymous');
+                    localStorage.setItem('quizStartTime', Date.now());
+                    
+                    // Redirect to quiz page
+                    window.location.href = 'quiz.html';
+                });
+            });
+            
+            // Animate elements when they come into view
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('.animated');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementPosition < windowHeight - 50) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // Set initial style for animated elements
+            document.querySelectorAll('.animated').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'all 0.6s ease';
+            });
+            
+            // Run on scroll
+            window.addEventListener('scroll', animateOnScroll);
+            
+            // Run once on page load
+            animateOnScroll();
+        });
+    </script>
+</body>
+</html> 

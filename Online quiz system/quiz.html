@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz in Progress - Online Quiz System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <div class="timer">
+                    <i class="fas fa-clock"></i>
+                    <span id="timeLeft">30:00</span>
+                </div>
+                <div class="score">
+                    <i class="fas fa-star"></i>
+                    <span id="currentScore">0</span>
+                </div>
+            </div>
+            
+            <div class="quiz-content">
+                <div class="question-number">
+                    Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+                </div>
+                <div class="question">
+                    <h2 id="questionText">Loading question...</h2>
+                </div>
+                <div class="options" id="optionsContainer">
+                    <!-- Options will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button id="prevQuestion" class="btn-secondary" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button id="nextQuestion" class="btn-primary">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="submitQuiz" class="btn-success" style="display: none;">
+                    Submit Quiz <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
